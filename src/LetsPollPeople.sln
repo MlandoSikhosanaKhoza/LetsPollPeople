@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetsPollPeople.UI", "LetsPo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsPollPeople.Api", "LetsPollPeople.Api\LetsPollPeople.Api.csproj", "{01090307-73BD-4AAD-8CAD-E9EC0869262D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsPollPeople.BusinessLogic", "LetsPollPeople.BusinessLogic\LetsPollPeople.BusinessLogic.csproj", "{D78B5D30-516D-44E5-B802-14EF4412953A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{01090307-73BD-4AAD-8CAD-E9EC0869262D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01090307-73BD-4AAD-8CAD-E9EC0869262D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01090307-73BD-4AAD-8CAD-E9EC0869262D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D78B5D30-516D-44E5-B802-14EF4412953A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D78B5D30-516D-44E5-B802-14EF4412953A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D78B5D30-516D-44E5-B802-14EF4412953A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D78B5D30-516D-44E5-B802-14EF4412953A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
