@@ -1,22 +1,30 @@
 ﻿@inherits LayoutComponentBase
+@inject ILocalStorageService localStorage
+@inject NavigationManager _navigationManager
 <MudThemeProvider />
 <MudPopoverProvider />
 <MudLayout>
+
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
-        <MudMenu Icon="@Icons.Material.Filled.MoreVert" ActivationEvent="MouseEvent.LeftClick" Color="Color.Inherit">
-            <ChildContent>
-                <MudMenuItem>Profile</MudMenuItem>
-                <MudMenuItem>Sign Out</MudMenuItem>
-            </ChildContent>
-        </MudMenu>
+        <AuthorizeView Roles="User">
+            <Authorized>
+                <MudMenu Icon="@Icons.Material.Filled.MoreVert" ActivationEvent="MouseEvent.LeftClick" Color="Color.Inherit">
+                    <ChildContent>
+                        <MudMenuItem OnClick="@(async (e)=> { await Logout(); })">Sign Out</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+            </Authorized>
+        </AuthorizeView>
     </MudAppBar>
+
+
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
         <MudDrawerHeader>
             <MudText Typo="Typo.h5" Class="mt-1">Application</MudText>
         </MudDrawerHeader>
-        <NavMenu/>
+        <NavMenu />
     </MudDrawer>
     <MudMainContent>
         @Body
@@ -31,4 +39,10 @@
     {
         _drawerOpen = !_drawerOpen;
     }
+
+    async Task Logout()
+    {
+        await localStorage.RemoveItemAsync("login_token");
+        _navigationManager.NavigateTo("/login", true);
+    } 
 }

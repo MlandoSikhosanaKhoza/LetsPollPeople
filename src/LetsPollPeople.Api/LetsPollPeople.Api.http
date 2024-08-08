@@ -1,6 +1,0 @@
-@LetsPollPeople.Api_HostAddress = http://localhost:5114
-
-GET {{LetsPollPeople.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

@@ -1,11 +1,63 @@
+using LetsPollPeople.BusinessLogic;
+using LetsPollPeople.DAL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")??"";
 // Add services to the container.
 
-builder.Services.AddControllers();
+//Set you serialization options
+builder.Services.AddControllers(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    options.JsonSerializerOptions.ReferenceHandler     = ReferenceHandler.IgnoreCycles;
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Inject Repositories (Data Access Layer) and Business Logic
+builder.Services.AddRepository().AddBusinessLogic();
+
+//Add Mapper
+builder.Services.AddAutoMapper(typeof(Mapping));
+
+//Allow access from the front end website
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder => builder.WithOrigins("https://localhost:7111").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+});
+
+//DbContext Configuration
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions => {
+            sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(5), errorNumbersToAdd: null);
+        }));
+
+//Add Jwt Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.SaveToken                 = true;
+    options.RequireHttpsMetadata      = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+
+        ValidateIssuer   = true,
+        ValidateAudience = true,
+        ValidAudience    = builder.Configuration["JWT:ValidAudience"],
+        ValidIssuer      = builder.Configuration["JWT:ValidIssuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"] ?? ""))
+
+    };
+});
 
 var app = builder.Build();
 
@@ -22,4 +74,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseCors();
 app.Run();

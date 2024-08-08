@@ -1,0 +1,1 @@
+Make sure that the Api and UI are startup projects

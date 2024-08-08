@@ -1,0 +1,66 @@
+﻿@page "/register"
+@inherits PageComponentBase
+
+@if (IsLoaded)
+{
+    <EditForm Model="InputModel" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <div class="w3-row">
+            <div class="w3-padding w3-col s12">
+                <h2>Register</h2>
+            </div>
+            <div class="w3-padding w3-col l12">
+                <MudTextField For=@(()=> InputModel!.Username)        @bind-Value="@InputModel!.Username"  Variant="Variant.Outlined" Label="Username" />
+            </div>
+            <div class="w3-row">
+                <div class="w3-padding w3-col l6">
+                    <MudTextField For=@(()=> InputModel!.FirstName) @bind-Value="@InputModel!.FirstName" Variant="Variant.Outlined" Label="Name" />
+                </div>
+                <div class="w3-padding w3-col l6">
+                    <MudTextField For=@(()=> InputModel!.LastName) @bind-Value="@InputModel!.LastName" Variant="Variant.Outlined" Label="Surname" />
+                </div>
+            </div>
+            
+            <div class="w3-padding w3-col l6">
+                <MudTextField For=@(()=> InputModel!.Password)        @bind-Value="@InputModel!.Password"  Variant="Variant.Outlined" Label="Password" InputType="InputType.Password" />
+            </div>
+            <div class="w3-padding w3-col l6">
+                <MudTextField For=@(()=> InputModel!.ConfirmPassword) @bind-Value="@InputModel!.ConfirmPassword" Variant="Variant.Outlined" Label="Confirm Password" InputType="InputType.Password" />
+            </div>
+            <div class="w3-padding w3-col l12">
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary">Register</MudButton>
+            </div>
+        </div>
+    </EditForm>
+}
+
+@code {
+    protected UserModel? InputModel { get; set; }
+
+    protected override void OnInitialized()
+    {
+        IsLoaded   = false;
+        InputModel = new UserModel();
+        IsLoaded   = true;
+    }
+
+    public async void Submit()
+    {
+        try
+        {
+            RegisterResult registerResult = await _pollApiClient!.User_RegisterAsync(InputModel);
+            if (registerResult.IsRegistered)
+            {
+                await DisplayInformationDialog("Success!","You've been successfully registered.");
+            }
+            else
+            {
+                await DisplayInformationDialog("Failed Registration", string.Join(". ",registerResult.ErrorMessages));
+            }
+        }
+        catch (ApiException e)
+        {
+            await DisplayInformationDialog($"Error {e.StatusCode}", $"{e.Message}");
+        }
+    }
+}
