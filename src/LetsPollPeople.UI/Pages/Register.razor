@@ -28,7 +28,7 @@
                 <MudTextField For=@(()=> InputModel!.ConfirmPassword) @bind-Value="@InputModel!.ConfirmPassword" Variant="Variant.Outlined" Label="Confirm Password" InputType="InputType.Password" />
             </div>
             <div class="w3-padding w3-col l12">
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary">Register</MudButton>
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="IsLoadingRegistration" Color="Color.Primary">Register</MudButton>
             </div>
         </div>
     </EditForm>
@@ -36,6 +36,8 @@
 
 @code {
     protected UserModel? InputModel { get; set; }
+
+    public bool IsLoadingRegistration { get; set; } = false;
 
     protected override void OnInitialized()
     {
@@ -46,12 +48,14 @@
 
     public async void Submit()
     {
+        IsLoadingRegistration = true;
         try
         {
             RegisterResult registerResult = await _pollApiClient!.User_RegisterAsync(InputModel);
             if (registerResult.IsRegistered)
             {
                 await DisplayInformationDialog("Success!","You've been successfully registered.");
+                InputModel = new UserModel();
             }
             else
             {
@@ -62,5 +66,7 @@
         {
             await DisplayInformationDialog($"Error {e.StatusCode}", $"{e.Message}");
         }
+        IsLoadingRegistration = false;
+        StateHasChanged();
     }
 }

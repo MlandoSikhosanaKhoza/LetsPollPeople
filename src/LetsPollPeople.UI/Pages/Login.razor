@@ -16,7 +16,7 @@
                 <MudTextField For=@(()=> InputModel!.Password) @bind-Value="@InputModel!.Password" Variant="Variant.Outlined" Label="Password" InputType="InputType.Password" />
             </div>
             <div class="w3-padding w3-col l12">
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary">Login</MudButton>
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="IsLoadingLogin" Color="Color.Primary">Login</MudButton>
             </div>
         </div>
         
@@ -25,6 +25,8 @@
 
 @code {
     protected LoginModel? InputModel { get; set; }
+
+    public bool IsLoadingLogin { get; set; } = false;
 
     protected override void OnInitialized()
     {
@@ -35,6 +37,7 @@
 
     public async void Submit()
     {
+        IsLoadingLogin = true;
         try
         {
             LoginResult loginResult = await _pollApiClient!.User_LoginAsync(InputModel!);
@@ -52,5 +55,7 @@
         {
             await DisplayInformationDialog($"Error {e.StatusCode}", $"{e.Message}");
         }
+        IsLoadingLogin = false;
+        StateHasChanged();
     }
 }
