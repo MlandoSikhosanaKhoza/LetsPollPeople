@@ -11,13 +11,11 @@ namespace LetsPollPeople.DAL
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<UnitOfWork> _logger;
         private Dictionary<Type, object> Repositories;
 
-        public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger)
+        public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
-            _logger  = logger;
         }
 
         /// <summary>
@@ -45,7 +43,6 @@ namespace LetsPollPeople.DAL
         /// </summary>
         public void SaveChanges()
         {
-            _logger.Log(LogLevel.Information, "Saving changes synchronously");
             _context.SaveChanges();
         }
 

@@ -20,6 +20,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LetsPollPeople.Api\LetsPollPeople.Api.csproj" />
+    <ProjectReference Include="..\LetsPollPeople.BusinessLogic\LetsPollPeople.BusinessLogic.csproj" />
+    <ProjectReference Include="..\LetsPollPeople.DAL\LetsPollPeople.DAL.csproj" />
+    <ProjectReference Include="..\LetsPollPeople.Shared\LetsPollPeople.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 

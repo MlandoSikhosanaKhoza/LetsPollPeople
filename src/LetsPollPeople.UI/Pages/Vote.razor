@@ -80,6 +80,7 @@
             await DisplayInformationDialog($"Error {e.StatusCode}", $"{e.Message}");
         }
         IsLoadingData = false;
+        StateHasChanged();
     }
 
 }
