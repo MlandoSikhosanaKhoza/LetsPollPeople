@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @inherits PageComponentBase
+<PageTitle>Register</PageTitle>
 
 @if (IsLoaded)
 {
@@ -51,6 +52,7 @@
         IsLoadingRegistration = true;
         try
         {
+            await _pollApiClient!.Initialize();
             RegisterResult registerResult = await _pollApiClient!.User_RegisterAsync(InputModel);
             if (registerResult.IsRegistered)
             {

@@ -16,6 +16,14 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "[dbo].[Option]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Question]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Role]",
          "ObjectType": 0
       },
@@ -25,6 +33,10 @@
       },
       {
          "Name": "[dbo].[UserRole]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserVote]",
          "ObjectType": 0
       }
    ],

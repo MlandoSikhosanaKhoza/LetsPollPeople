@@ -25,11 +25,10 @@ namespace LetsPollPeople.DAL
         /// <returns></returns>
         public User? GetByLogin(LoginModel loginModel)
         {
-            string hashedPassword = Sha256Helper.WriteSha256AsString(loginModel.Password);
-            return 
-                _dbSet
-                .Include(u=>u.UserRole).ThenInclude(u=>u.Role)
-                .FirstOrDefault(u => u.Username.ToLower() == loginModel.Username.ToLower()
+            string hashedPassword = Sha256Helper.WriteSha256AsString(loginModel.Password, loginModel.Username.ToLower());
+            
+            return  _dbSet.Include(u=>u.UserRole).ThenInclude(u=>u.Role)
+                    .FirstOrDefault(u => u.Username.ToLower() == loginModel.Username.ToLower()
                     && u.Password == hashedPassword);
         }
 

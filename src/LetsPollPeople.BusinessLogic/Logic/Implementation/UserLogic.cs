@@ -72,7 +72,7 @@ namespace LetsPollPeople.BusinessLogic
             if (!_userRepository.ExistByUsername(userModel.Username))
             {
                 //Encrypt the users password
-                userModel.Password = Sha256Helper.WriteSha256AsString(userModel.Password);
+                userModel.Password = Sha256Helper.WriteSha256AsString(userModel.Password , userModel.Username.ToLower());
 
                 //Add the user
                 User user =_userRepository.Insert(_mapper.Map<User>(userModel));

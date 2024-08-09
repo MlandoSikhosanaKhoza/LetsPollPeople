@@ -4,8 +4,8 @@
     <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Inherit">Home</MudNavLink>
     <AuthorizeView Roles="User">
         <Authorized>
-            <MudNavLink Href="/counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.LocalLibrary" IconColor="Color.Inherit">Counter</MudNavLink>
-            <MudNavLink Href="/weather" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.People" IconColor="Color.Inherit">Weather</MudNavLink>
+            <MudNavLink Href="/create-poll" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PlusOne" IconColor="Color.Inherit">Create Poll</MudNavLink>
+            <MudNavLink Href="/poll-results" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.PieChart" IconColor="Color.Inherit">Poll Results</MudNavLink>
         </Authorized>
         <NotAuthorized>
             <MudNavLink Href="/login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Login" IconColor="Color.Inherit">Login</MudNavLink>

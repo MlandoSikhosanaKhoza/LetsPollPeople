@@ -13,6 +13,7 @@ namespace LetsPollPeople.BusinessLogic
         {
 
             services.AddScoped<IUserLogic, UserLogic>();
+            services.AddScoped<IPollLogic, PollLogic>();
 
             return services;
         }

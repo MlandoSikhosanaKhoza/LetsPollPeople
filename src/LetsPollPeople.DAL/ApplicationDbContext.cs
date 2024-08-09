@@ -14,14 +14,38 @@ public partial class ApplicationDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Option> Option { get; set; }
+
+    public virtual DbSet<Question> Question { get; set; }
+
     public virtual DbSet<Role> Role { get; set; }
 
     public virtual DbSet<User> User { get; set; }
 
     public virtual DbSet<UserRole> UserRole { get; set; }
 
+    public virtual DbSet<UserVote> UserVote { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Option>(entity =>
+        {
+            entity.HasKey(e => e.OptionId).HasName("PK__Option__92C7A1FF80E2C0C9");
+
+            entity.HasOne(d => d.Question).WithMany(p => p.Option)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Option__Question__2F10007B");
+        });
+
+        modelBuilder.Entity<Question>(entity =>
+        {
+            entity.HasKey(e => e.QuestionId).HasName("PK__Question__0DC06FAC03850C2E");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Question)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Question__UserId__2C3393D0");
+        });
+
         modelBuilder.Entity<Role>(entity =>
         {
             entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1ABCEE635E");
@@ -43,6 +67,23 @@ public partial class ApplicationDbContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.UserRole)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__UserRole__UserId__286302EC");
+        });
+
+        modelBuilder.Entity<UserVote>(entity =>
+        {
+            entity.HasKey(e => e.UserVoteId).HasName("PK__UserVote__0F0C36ECDCE8DEB5");
+
+            entity.HasOne(d => d.Option).WithMany(p => p.UserVote)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UserVote__Option__33D4B598");
+
+            entity.HasOne(d => d.Question).WithMany(p => p.UserVote)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UserVote__Questi__32E0915F");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserVote)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UserVote__UserId__31EC6D26");
         });
 
         OnModelCreatingPartial(modelBuilder);

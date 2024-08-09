@@ -34,5 +34,11 @@ public partial class User
     public bool IsActive { get; set; }
 
     [InverseProperty("User")]
+    public virtual ICollection<Question> Question { get; set; } = new List<Question>();
+
+    [InverseProperty("User")]
     public virtual ICollection<UserRole> UserRole { get; set; } = new List<UserRole>();
+
+    [InverseProperty("User")]
+    public virtual ICollection<UserVote> UserVote { get; set; } = new List<UserVote>();
 }

@@ -1,0 +1,48 @@
+﻿@page "/poll-results"
+@inherits PageComponentBase
+<PageTitle>Poll Results</PageTitle>
+<div class="w3-container">
+    @if (IsLoaded)
+    {
+        <div class="w3-container w3-row">
+            @foreach (QuestionModel questionModel in pollResults)
+            {
+                <div class="w3-padding w3-margin-bottom w3-col m4 s12">
+                    <div class="w3-card w3-padding" style="min-height: 470px;">
+                        <h6>@questionModel.QuestionText</h6>
+                        <MudChart ChartType="ChartType.Pie" InputData="(questionModel.Option.Select(o =>Convert.ToDouble(o.NumberOfVotes)).ToArray())" InputLabels="(questionModel.Option.Select(o => o.OptionText).ToArray())" Width="100%" Height="200px" />
+                        <div class="w3-row" style="overflow-y: auto; height: 60px;">
+                            @foreach (OptionModel option in questionModel.Option)
+                            {
+                                <span class="w3-tag w3-border w3-border-white">@option.OptionText | @option.NumberOfVotes</span>
+                            }
+                        </div>
+                        <div class="w3-row w3-center">
+                            <MudButton Variant="Variant.Filled" OnClick="()=>Vote(questionModel.QuestionId)" ButtonType="ButtonType.Button" Color="Color.Primary">Vote</MudButton>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    
+</div>
+@code {
+    protected IEnumerable<QuestionModel> pollResults { get; set; } = new List<QuestionModel>();
+
+    bool IsLoadingPollCreation { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoaded    = false;
+        await _pollApiClient!.Initialize();
+        pollResults = await _pollApiClient!.Polls_GetQuestionsAsync();
+        IsLoaded    = true;
+    }
+
+    void Vote(int questionId)
+    {
+        _navigationManager!.NavigateTo($"/vote/{questionId}");
+    }
+
+}

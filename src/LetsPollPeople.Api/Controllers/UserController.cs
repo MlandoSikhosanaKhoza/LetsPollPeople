@@ -33,7 +33,7 @@ namespace LetsPollPeople.Api.Controllers
         }
 
         /// <summary>
-        /// Authenticate the user
+        /// Add a new user to the database
         /// </summary>
         /// <param name="userModel"></param>
         /// <returns></returns>

@@ -9,9 +9,9 @@ namespace LetsPollPeople.Shared
 {
     public class Sha256Helper
     {
-        public static string WriteSha256AsString(string Value)
+        public static string WriteSha256AsString(string text,string salt)
         {
-            var message = Encoding.UTF8.GetBytes(Value);
+            var message = Encoding.UTF8.GetBytes(text + salt);
             SHA256 hashString = SHA256.Create();
 
             string hex = "";

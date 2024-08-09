@@ -1,6 +1,7 @@
 ﻿@page "/login"
 @inject ILocalStorageService localStorage
 @inherits PageComponentBase
+<PageTitle>Login</PageTitle>
 @if (IsLoaded)
 {
     <EditForm Model="InputModel" OnValidSubmit="Submit">
@@ -40,6 +41,7 @@
         IsLoadingLogin = true;
         try
         {
+            await _pollApiClient!.Initialize();
             LoginResult loginResult = await _pollApiClient!.User_LoginAsync(InputModel!);
             if (loginResult.IsAuthenticated)
             {

@@ -29,7 +29,7 @@ namespace LetsPollPeople.Shared.Helpers
         //Read a JWT Token for context accessor
         public static string? GetTokenValue(IHttpContextAccessor ContextAccessor, string TokenField)
         {
-            JwtSecurityToken token = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadJwtToken(ContextAccessor.HttpContext.Request.Headers["Authorization"].ToString());
+            JwtSecurityToken token = (JwtSecurityToken)new JwtSecurityTokenHandler().ReadJwtToken(ContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Split(' ').Last());
             string? tokenValue     = token?.Claims.Where(c => c.Type.Equals(TokenField)).FirstOrDefault()?.Value;
             return tokenValue;
         }

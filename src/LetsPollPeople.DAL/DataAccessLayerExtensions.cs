@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LetsPollPeople.DAL.Repository;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace LetsPollPeople.DAL
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IUserVoteRepository, UserVoteRepository>();
             
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
