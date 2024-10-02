@@ -1,0 +1,48 @@
+﻿@inherits LayoutComponentBase
+@inject ILocalStorageService localStorage
+@inject NavigationManager _navigationManager
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudLayout>
+
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+        <AuthorizeView Roles="User">
+            <Authorized>
+                <MudMenu Icon="@Icons.Material.Filled.MoreVert" ActivationEvent="MouseEvent.LeftClick" Color="Color.Inherit">
+                    <ChildContent>
+                        <MudMenuItem OnClick="@(async (e)=> { await Logout(); })">Sign Out</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+            </Authorized>
+        </AuthorizeView>
+    </MudAppBar>
+
+
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">Bidvest</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+<MudDialogProvider />
+<MudSnackbarProvider />
+@code {
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    async Task Logout()
+    {
+        await localStorage.RemoveItemAsync("login_token");
+        _navigationManager.NavigateTo("/login", true);
+    } 
+}

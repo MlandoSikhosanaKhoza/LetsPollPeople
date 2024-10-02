@@ -1,0 +1,85 @@
+﻿@page "/vote/{QuestionId:int}"
+@inherits PageComponentBase
+<PageTitle>Vote</PageTitle>
+
+<div class="w3-container">
+    <EditForm Model="Model" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <div class="w3-row">
+            <div class="w3-padding w3-col s12">
+                <h2>Vote</h2>
+            </div>
+            <MudDivider/>
+            <div class="w3-padding w3-col l12">
+                <h4>@Model.QuestionText</h4>
+            </div>
+            <div class="w3-padding w3-col l12">
+                <MudRadioGroup T="int" @bind-Value="@OptionId">
+                    @foreach (OptionModel optionModel in Model.Options)
+                    {
+                        <MudRadio Value="optionModel.OptionId">@optionModel.OptionText</MudRadio>
+                    }
+                </MudRadioGroup>
+            </div>
+            
+            <div class="w3-padding w3-col l12">
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="IsLoadingData" Color="Color.Primary">Submit your vote</MudButton>
+            </div>
+        </div>
+    </EditForm>
+
+</div>
+
+@code {
+    [Parameter]
+    public int QuestionId { get; set; }
+
+    protected QuestionModel Model { get; set; } = new QuestionModel(); 
+
+    private int OptionId { get; set; }
+
+    private bool IsLoadingData { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        IsLoaded   = false;
+        Model      = await _bidvestApiClient.Polls_GetQuestionByIdAsync(QuestionId);
+        IsLoaded   = true;
+    }
+
+    public void AddOption()
+    {
+        Model!.Options.Add(new OptionModel());
+        StateHasChanged();
+    }
+
+    public async void Submit()
+    {
+        IsLoadingData = true;
+        try
+        {
+            if (OptionId != 0)
+            {
+                await _bidvestApiClient!.Polls_VoteAsync(QuestionId, OptionId);
+
+                await DisplayInformationDialog("Success!", "Your vote has been successfully tracked.");
+
+                await Task.Delay(3000);
+
+                _navigationManager!.NavigateTo("/poll-results");
+            }
+            else
+            {
+                await DisplayInformationDialog($"Choose your vote", $"Select an item");
+            }
+        }
+        catch (ApiException e)
+        {
+            await DisplayInformationDialog($"Error {e.StatusCode}", $"{e.Message}");
+        }
+        IsLoadingData = false;
+        StateHasChanged();
+    }
+
+}

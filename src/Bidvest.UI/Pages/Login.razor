@@ -1,0 +1,62 @@
+﻿@page "/login"
+@inherits PageComponentBase
+<PageTitle>Login</PageTitle>
+@if (IsLoaded)
+{
+    <EditForm Model="InputModel" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <div class="w3-row">
+            <div class="w3-padding w3-col s12">
+                <h2>Login</h2>
+            </div>
+            <div class="w3-padding w3-col l6">
+                <MudTextField For=@(()=> InputModel!.Username) @bind-Value="@InputModel!.Username" Variant="Variant.Outlined" Label="Username" />
+            </div>
+            <div class="w3-padding w3-col l6">
+                <MudTextField For=@(()=> InputModel!.Password) @bind-Value="@InputModel!.Password" Variant="Variant.Outlined" Label="Password" InputType="InputType.Password" />
+            </div>
+            <div class="w3-padding w3-col l12">
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="IsLoadingLogin" Color="Color.Primary">Login</MudButton>
+            </div>
+        </div>
+        
+    </EditForm>
+}
+
+@code {
+    protected LoginModel? InputModel { get; set; }
+
+    public bool IsLoadingLogin { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        IsLoaded   = false;
+        InputModel = new LoginModel();
+        IsLoaded   = true;
+    }
+
+    public async void Submit()
+    {
+        IsLoadingLogin = true;
+        try
+        {
+            LoginResult loginResult = await _bidvestApiClient!.User_LoginAsync(InputModel!);
+            if (loginResult.IsAuthenticated)
+            {
+                await _authorizationService!.SetLoginToken(loginResult.JwtToken??"");
+                _navigationManager!.NavigateTo("/",true);
+            }
+            else
+            {
+                await DisplayInformationDialog("Access Denied", "Incorrect Username/Password");
+            }
+        }
+        catch (ApiException e)
+        {
+            await DisplayInformationDialog($"Error {e.StatusCode}", $"{e.Message}");
+        }
+        IsLoadingLogin = false;
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,80 @@
+﻿@page "/create-poll"
+@inherits PageComponentBase
+<PageTitle>Create Poll</PageTitle>
+
+<div class="w3-container">
+    <EditForm Model="InputModel" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <div class="w3-row">
+            <div class="w3-padding w3-col s12">
+                <h2>Create Poll</h2>
+            </div>
+            <div class="w3-padding w3-col l12">
+                <MudTextField For=@(()=> InputModel!.QuestionText) @bind-Value="@InputModel!.QuestionText" Variant="Variant.Outlined" Label="Question" />
+            </div>
+            @foreach (OptionModel optionModel in InputModel.Options)
+            {
+                <div class="w3-row">
+                    <div class="w3-padding w3-col s9">
+                        <MudTextField For=@(()=> optionModel.OptionText) @bind-Value="@optionModel.OptionText" Margin="Margin.Dense" Variant="Variant.Outlined" Label="Option" />
+                    </div>
+                    <div class="w3-padding-16 w3-col s3">
+                        <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Button" OnClick="()=>InputModel.Options.Remove(optionModel)" Disabled="IsLoadingPollCreation" Color="Color.Primary">Delete</MudButton>
+                    </div>
+                </div>
+            }
+            <div class="w3-padding w3-col l12">
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Button" OnClick="AddOption" Disabled="IsLoadingPollCreation" Color="Color.Primary">Add Option</MudButton>
+            </div>
+            <div class="w3-padding w3-col l12">
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="IsLoadingPollCreation" Color="Color.Primary">Create Poll</MudButton>
+            </div>
+        </div>
+    </EditForm>
+
+</div>
+
+@code {
+    protected QuestionModel InputModel { get; set; } = new QuestionModel();
+
+    public bool IsLoadingPollCreation { get; set; } = false;
+
+    public void AddOption()
+    {
+        InputModel!.Options.Add(new OptionModel());
+    }
+
+    public async void Submit()
+    {
+        if (InputModel.Options.Count() < 2)
+        {
+            await DisplayInformationDialog("Invalid Data", $"You need at least 2 options");
+            return;
+        }
+        if (InputModel.Options.Any(o => string.IsNullOrEmpty(o.OptionText)))
+        {
+            await DisplayInformationDialog("Invalid Data", $"Ensure that all fields are filled in.");
+            return;
+        }
+        IsLoadingPollCreation = true;
+        try
+        {
+            QuestionModel questionModel = await _bidvestApiClient!.Polls_CreateQuestionAsync(InputModel);
+
+            InputModel = new QuestionModel();
+
+            await DisplayInformationDialog("Success!", "Poll successfully created.");
+
+            await Task.Delay(3000);
+
+            _navigationManager!.NavigateTo("/poll-results");
+        }
+        catch (ApiException e)
+        {
+            await DisplayInformationDialog($"Error {e.StatusCode}", $"{e.Message}");
+        }
+        IsLoadingPollCreation = false;
+        StateHasChanged();
+    }
+
+}
