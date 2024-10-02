@@ -19,7 +19,7 @@ namespace MeetingMinutes.DAL.Repository
         }
 
         #region Create
-        public TEntity Insert(TEntity entity)
+        public virtual TEntity Insert(TEntity entity)
         {
             TEntity addedEntity = _dbSet.Add(entity).Entity;
             return addedEntity;
@@ -27,25 +27,25 @@ namespace MeetingMinutes.DAL.Repository
         #endregion Create
 
         #region Read
-        public TEntity? GetById(object id)
+        public virtual TEntity? GetById(object id)
         {
             return _dbSet.Find(id);
         }
-        public bool Any()
+        public virtual bool Any()
         {
             return _dbSet.Any();
         }
 
-        public int Count()
+        public virtual int Count()
         {
             return _dbSet.Count();
         }
-        public async Task<TEntity?> GetByIdAsync(object id)
+        public virtual async Task<TEntity?> GetByIdAsync(object id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public IEnumerable<TEntity> Get(
+        public virtual IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             string includeProperties = "")
@@ -73,7 +73,7 @@ namespace MeetingMinutes.DAL.Repository
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(
+        public virtual async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             string includeProperties = "")
@@ -101,14 +101,14 @@ namespace MeetingMinutes.DAL.Repository
             }
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public virtual IEnumerable<TEntity> GetAll()
         {
             return _dbSet.AsEnumerable<TEntity>();
         }
         #endregion Read
 
         #region Update
-        public bool Update(TEntity entityToUpdate)
+        public virtual bool Update(TEntity entityToUpdate)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace MeetingMinutes.DAL.Repository
         #endregion Update
 
         #region Delete
-        public bool Delete(TEntity entityToDelete)
+        public virtual bool Delete(TEntity entityToDelete)
         {
             try
             {

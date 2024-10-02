@@ -14,7 +14,26 @@ namespace MeetingMinutes.BusinessLogic
         public Mapping()
         {
             //User Mapping
-            CreateMap<User, UserModel>().ReverseMap();
+            CreateMap<User, UserModel>().ForMember(u => u.Password, m => m.Ignore());
+            CreateMap<UserModel, User>();
+
+            //Meeting
+            CreateMap<Meeting, MeetingModel>().ReverseMap();
+
+            //Meeting Type
+            CreateMap<MeetingType, MeetingTypeModel>().ReverseMap();
+
+            //Meeting Item
+            CreateMap<MeetingItem,MeetingItemModel>().ReverseMap();
+
+            //Item
+            CreateMap<Item, ItemModel>().ReverseMap();
+
+            //Item Status
+            CreateMap<ItemStatus, ItemStatusModel>().ReverseMap();
+
+            //Status
+            CreateMap<Status, StatusModel>().ReverseMap();
 
             //Role Mapping
             CreateMap<Role, RoleModel>().ReverseMap();

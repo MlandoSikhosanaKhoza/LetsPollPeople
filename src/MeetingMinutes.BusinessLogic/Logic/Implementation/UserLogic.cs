@@ -58,6 +58,11 @@ namespace MeetingMinutes.BusinessLogic
             return result;
         }
 
+        public IEnumerable<UserModel> GetAll()
+        {
+            return _userRepository.GetAll().Select(_mapper.Map<UserModel>);
+        }
+
         /// <summary>
         /// Add new user to database
         /// </summary>

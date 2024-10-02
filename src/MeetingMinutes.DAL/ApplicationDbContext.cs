@@ -47,6 +47,10 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<Action>(entity =>
         {
             entity.HasKey(e => e.ActionId).HasName("PK__Action__FFE3F4D93EF34768");
+
+            entity.HasOne(d => d.Item).WithMany(p => p.Actions)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Action__ItemId__5CD6CB2B");
         });
 
         modelBuilder.Entity<Item>(entity =>

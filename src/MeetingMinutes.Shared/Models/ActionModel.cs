@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
-namespace MeetingMinutes.DAL.Entities;
+namespace MeetingMinutes.Shared.Models;
 
 [Table("Action")]
-public partial class Action
+public partial class ActionModel
 {
     [Key]
     public int ActionId { get; set; }
@@ -17,13 +16,8 @@ public partial class Action
     public bool IsDone { get; set; }
 
     [Required]
-    [StringLength(500)]
-    [Unicode(false)]
     public string Todo { get; set; }
 
     public int ItemId { get; set; }
-
-    [ForeignKey("ItemId")]
-    [InverseProperty("Actions")]
-    public virtual Item Item { get; set; }
+    public virtual ItemModel Item { get; set; }
 }

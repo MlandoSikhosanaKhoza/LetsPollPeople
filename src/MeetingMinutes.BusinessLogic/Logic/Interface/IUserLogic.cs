@@ -23,5 +23,11 @@ namespace MeetingMinutes.BusinessLogic
         /// <param name="userModel"></param>
         /// <returns></returns>
         RegisterResult Register(UserModel userModel);
+
+        /// <summary>
+        /// Get a list of users
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<UserModel> GetAll();
     }
 }

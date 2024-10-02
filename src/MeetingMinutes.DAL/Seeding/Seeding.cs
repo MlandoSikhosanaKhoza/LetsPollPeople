@@ -14,6 +14,7 @@ namespace MeetingMinutes.DAL
         {
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new MeetingTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new StatusConfiguration());
         }
     }
 }

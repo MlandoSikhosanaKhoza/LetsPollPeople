@@ -24,6 +24,13 @@ public partial class Item
     [Unicode(false)]
     public string Description { get; set; }
 
+    public DateTime DueDate { get; set; }
+
+    public DateTime? DateCompleted { get; set; }
+
+    [InverseProperty("Item")]
+    public virtual ICollection<Action> Actions { get; set; } = new List<Action>();
+
     [InverseProperty("Item")]
     public virtual ICollection<ItemStatus> ItemStatuses { get; set; } = new List<ItemStatus>();
 

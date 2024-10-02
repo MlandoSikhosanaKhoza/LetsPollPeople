@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace MeetingMinutes.DAL.Entities;
 
 [Table("Meeting")]
+[Index("MeetingTypeId", Name = "IX_Meeting_MeetingTypeId")]
 [Index("Code", Name = "UQ__Meeting__A25C5AA7CC51BAC9", IsUnique = true)]
 public partial class Meeting
 {
@@ -44,6 +45,8 @@ public partial class Meeting
     public string Description { get; set; }
 
     public int CreatedBy { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     [InverseProperty("Meeting")]
     public virtual ICollection<MeetingItem> MeetingItems { get; set; } = new List<MeetingItem>();

@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 namespace MeetingMinutes.DAL.Entities;
 
 [Table("ItemStatus")]
+[Index("ItemId", Name = "IX_ItemStatus_ItemId")]
+[Index("StatusId", Name = "IX_ItemStatus_StatusId")]
 public partial class ItemStatus
 {
     [Key]

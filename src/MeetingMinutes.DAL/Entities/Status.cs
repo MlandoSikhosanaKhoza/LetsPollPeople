@@ -22,6 +22,10 @@ public partial class Status
 
     public bool IsDefaultStatus { get; set; }
 
+    public bool IsCompleteStatus {  get; set; }
+
+    public bool IsDeleted {  get; set; }
+
     [InverseProperty("Status")]
     public virtual ICollection<ItemStatus> ItemStatuses { get; set; } = new List<ItemStatus>();
 }

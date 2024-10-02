@@ -4,6 +4,7 @@ using MeetingMinutes.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeetingMinutes.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240929154725_AddIsDeletedToMeeting")]
+    partial class AddIsDeletedToMeeting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,17 +61,11 @@ namespace MeetingMinutes.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemId"));
 
-                    b.Property<DateTime?>("DateCompleted")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .IsUnicode(false)
                         .HasColumnType("varchar(1000)");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -349,13 +346,7 @@ namespace MeetingMinutes.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"));
 
-                    b.Property<bool>("IsCompleteStatus")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsDefaultStatus")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("StatusName")
@@ -376,33 +367,25 @@ namespace MeetingMinutes.Api.Migrations
                         new
                         {
                             StatusId = 1,
-                            IsCompleteStatus = false,
                             IsDefaultStatus = true,
-                            IsDeleted = false,
                             StatusName = "Open"
                         },
                         new
                         {
                             StatusId = 2,
-                            IsCompleteStatus = false,
                             IsDefaultStatus = true,
-                            IsDeleted = false,
                             StatusName = "In Development"
                         },
                         new
                         {
                             StatusId = 3,
-                            IsCompleteStatus = false,
                             IsDefaultStatus = true,
-                            IsDeleted = false,
                             StatusName = "Awaiting Invoicing"
                         },
                         new
                         {
                             StatusId = 4,
-                            IsCompleteStatus = true,
                             IsDefaultStatus = true,
-                            IsDeleted = false,
                             StatusName = "Closed"
                         });
                 });

@@ -25,6 +25,8 @@ public partial class MeetingType
     [Unicode(false)]
     public string Name { get; set; }
 
+    public bool IsDeleted {  get; set; }
+
     [InverseProperty("MeetingType")]
     public virtual ICollection<Meeting> Meetings { get; set; } = new List<Meeting>();
 }
